@@ -1,4 +1,4 @@
-# 📊 Takeoff Analytics Dashboard
+#  Takeoff Analytics Dashboard
 
 The official admin dashboard for the **Takeoff** event platform. This application provides real-time insights into user registrations, event capacity, and conversion metrics.
 
