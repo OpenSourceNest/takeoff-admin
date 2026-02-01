@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* Cream/Beige tones */
+  --color-cream: #F0E6DA;
+  --color-cream-light: #F7EEE1;
+
+  /* Brown tones */
+  --color-brown-dark: #4C301B;
+  --color-brown-deep: #553A26;
+  --color-brown-medium: #937F70;
+
+  /* Orange accent */
+  --color-orange: #A9500C;
+
+  /* Black variations */
+  --color-black: #060301;
+  --color-black-soft: #170E07;
+  --color-black-dark: #1E150E;
+  --color-black-charcoal: #1E1A17;
+  --color-black-shadow: #211812;
+
+  /* Gray tones */
+  --color-gray: #4B4B4B;
+  --color-gray-light: #A6A4A4;
+
+  /* Font family */
+  --font-sans: var(--font-montserrat), system-ui, sans-serif;
+  --font-family-montserrat: var(--font-montserrat), system-ui, sans-serif;
+}
+
+body {
+  background-color: #060301;
+  color: #FFFFFF;
+  font-family: var(--font-family-montserrat);
+}
+
+/* Typography utilities */
+.text-highlight-orange {
+  color: #A9500C;
+}
+
+html {
+  scroll-behavior: smooth;
+}
