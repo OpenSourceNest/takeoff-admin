@@ -17,7 +17,6 @@ export interface Registration {
     interests?: string | null;
     openSourceKnowledge: number;
     eventId: string | null;
-    status: string;
     checkedIn: boolean;
     checkInTime?: string | null;
     createdAt: string;

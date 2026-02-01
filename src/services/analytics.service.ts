@@ -1,4 +1,4 @@
-import { ApiService } from './api.service';
+import { apiClient } from '@/lib/apiClient';
 import {
     RegistrationStats,
     VelocityData,
@@ -6,32 +6,35 @@ import {
     FilteredRegistrationData
 } from '@/types/analytics.types';
 
-export class AnalyticsService extends ApiService {
+export class AnalyticsService {
     /**
      * Get high-level registration statistics for dashboard
      */
     static async getStats(): Promise<RegistrationStats> {
-        return this.fetchJson<RegistrationStats>('/api/analytics/overview', {
+        const res = await apiClient.get<{ data: RegistrationStats }>('/api/analytics/overview', {
             credentials: 'include'
         });
+        return res.data;
     }
 
     /**
      * Get registration velocity (timeseries data)
      */
     static async getVelocity(days = 30): Promise<VelocityData[]> {
-        return this.fetchJson<VelocityData[]>(`/api/analytics/velocity?days=${days}`, {
+        const res = await apiClient.get<{ data: VelocityData[] }>(`/api/analytics/velocity?days=${days}`, {
             credentials: 'include'
         });
+        return res.data;
     }
 
     /**
      * Get demographics breakdown (pie charts)
      */
     static async getDemographics(): Promise<DemographicsData> {
-        return this.fetchJson<DemographicsData>('/api/analytics/demographics', {
+        const res = await apiClient.get<{ data: DemographicsData }>('/api/analytics/demographics', {
             credentials: 'include'
         });
+        return res.data;
     }
 
     /**
@@ -39,15 +42,11 @@ export class AnalyticsService extends ApiService {
      */
     static async trackVisit(page: string, sessionId: string, referrer?: string): Promise<void> {
         try {
-            await fetch('/api/analytics/track-visit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    page,
-                    sessionId,
-                    referrer,
-                    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Server'
-                })
+            await apiClient.post('/api/analytics/track-visit', {
+                page,
+                sessionId,
+                referrer,
+                userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Server'
             });
         } catch (error) {
             console.error('[AnalyticsService] tracking failed', error);
@@ -81,8 +80,9 @@ export class AnalyticsService extends ApiService {
             params.append('newsletterSub', String(filters.newsletterSub));
         }
 
-        return this.fetchJson<FilteredRegistrationData>(`/api/analytics/filtered?${params.toString()}`, {
+        const res = await apiClient.get<{ data: FilteredRegistrationData }>(`/api/analytics/filtered?${params.toString()}`, {
             credentials: 'include'
         });
+        return res.data;
     }
 }

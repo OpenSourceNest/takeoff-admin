@@ -59,7 +59,7 @@ export default function SettingsPage() {
             if (data.success) {
                 success("Event settings updated successfully!");
             } else {
-                error("Failed to update settings.");
+                error("Failed to update settings. Below reisterd attendee.");
             }
         } catch (err) {
             console.error(err);

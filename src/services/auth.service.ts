@@ -1,26 +1,21 @@
-import { ApiService } from './api.service';
+import { apiClient } from '@/lib/apiClient';
 import { AuthResponse, User } from '@/types/user.types';
 
-export class AuthService extends ApiService {
+export class AuthService {
     /**
      * Authenticate user and obtain session
      */
     static async login(email: string, password: string): Promise<User> {
-        const response = await this.fetchJson<AuthResponse['data']>('/api/auth/login', {
-            method: 'POST',
-            body: JSON.stringify({ email, password })
-        });
-        return response.user;
+        const response = await apiClient.post<AuthResponse>('/api/auth/login', { email, password });
+        return response.data.user;
     }
 
     /**
      * Get currently authenticated user session
      */
     static async getCurrentUser(): Promise<User> {
-        const response = await this.fetchJson<AuthResponse['data']>('/api/auth/me', {
-            method: 'GET'
-        });
-        return response.user;
+        const response = await apiClient.get<AuthResponse>('/api/auth/me');
+        return response.data.user;
     }
 
     /**
@@ -28,10 +23,7 @@ export class AuthService extends ApiService {
      */
     static async logout(): Promise<void> {
         try {
-            await fetch('/api/auth/logout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            });
+            await apiClient.post('/api/auth/logout', {});
         } catch (error) {
             console.error('[AuthService] Logout failed', error);
         }

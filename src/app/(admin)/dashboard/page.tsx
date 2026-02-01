@@ -8,10 +8,13 @@ import VelocityChart from '@/components/dashboard/VelocityChart';
 import ConversionFunnelChart from '@/components/dashboard/ConversionFunnelChart';
 import DemographicsCharts from '@/components/dashboard/DemographicsCharts';
 
+import { useSocket } from '@/hooks/useSocket';
+
 export default function AdminDashboardPage() {
     const [stats, setStats] = useState<RegistrationStats | null>(null);
     const [velocity, setVelocity] = useState<VelocityData[] | null>(null);
     const [demographics, setDemographics] = useState<DemographicsData | null>(null);
+    const socket = useSocket();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -30,12 +33,21 @@ export default function AdminDashboardPage() {
             }
         };
 
-        fetchData();
+        fetchData(); // Initial fetch
 
-        // Refresh every 10 seconds
-        const interval = setInterval(fetchData, 10000);
-        return () => clearInterval(interval);
-    }, []);
+        if (socket) {
+            socket.on('dashboard:update', (event) => {
+                console.log('Received update:', event);
+                fetchData(); // Refresh data on event
+            });
+        }
+
+        return () => {
+            if (socket) {
+                socket.off('dashboard:update');
+            }
+        };
+    }, [socket]);
 
     return (
         <div className="min-h-screen">

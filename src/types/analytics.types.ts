@@ -21,7 +21,6 @@ export interface DemographicsData {
     genders: { name: string; value: number }[];
     locations: { name: string; value: number }[];
     referrals: { name: string; value: number }[];
-    statuses: { name: string; value: number }[];
     checkins: { name: string; value: number }[];
     openSource: {
         average: string;

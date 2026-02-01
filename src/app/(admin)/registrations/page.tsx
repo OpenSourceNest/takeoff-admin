@@ -215,7 +215,6 @@ export default function RegistrationsPage() {
                                         <th className="p-4">Profession</th>
                                         <th className="p-4">Open Source</th>
                                         <th className="p-4">Referral</th>
-                                        <th className="p-4">Status</th>
                                         <th className="p-4">Check-in</th>
                                         <th className="p-4 text-right">Actions</th>
                                     </tr>
@@ -241,12 +240,6 @@ export default function RegistrationsPage() {
                                             </td>
                                             <td className="p-4 text-center">{reg.openSourceKnowledge}/10</td>
                                             <td className="p-4 max-w-[150px] truncate">{reg.referralSource}</td>
-                                            <td className="p-4">
-                                                <span className={`px-2 py-1 rounded text-xs ${reg.status === 'CONFIRMED' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'
-                                                    }`}>
-                                                    {reg.status || 'PENDING'}
-                                                </span>
-                                            </td>
                                             <td className="p-4">
                                                 {reg.checkedIn ? (
                                                     <span className="text-green-400 flex items-center gap-1">
@@ -384,14 +377,6 @@ export default function RegistrationsPage() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                                 <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-white/40 text-xs uppercase tracking-wider mb-1">Status</label>
-                                        <div className="text-white flex items-center gap-2">
-                                            <span className={`px-2 py-0.5 rounded text-xs ${selectedRegistration.status === 'CONFIRMED' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'
-                                                }`}>{selectedRegistration.status}</span>
-                                            {selectedRegistration.checkedIn && <span className="text-green-400 text-xs flex items-center gap-1"><Icon icon="heroicons:check-circle" /> Checked In</span>}
-                                        </div>
-                                    </div>
                                     <div>
                                         <label className="block text-white/40 text-xs uppercase tracking-wider mb-1">Gender</label>
                                         <div className="text-white">{selectedRegistration.gender}</div>
