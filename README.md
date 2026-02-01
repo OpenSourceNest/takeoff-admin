@@ -2,7 +2,7 @@
 
 The official admin dashboard for the **Takeoff** event platform. This application provides real-time insights into user registrations, event capacity, and conversion metrics.
 
-## 🚀 Features
+##  Features
 
 - **Real-time Overview**: Monitor total registrations, unique visitors, and capacity status.
 - **Conversion Tracking**: Track conversion rates with high precision (2 decimal places).
