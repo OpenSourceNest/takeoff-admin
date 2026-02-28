@@ -1,20 +1,25 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
+export const runtime = 'edge';
+
 export async function GET() {
     try {
         const cookieStore = await cookies();
         const token = cookieStore.get('token');
 
         if (!token) {
-            return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
+            return NextResponse.json(
+                { message: 'Not authenticated' },
+                { status: 401 }
+            );
         }
 
         const backendUrl = process.env.BACKEND_URL || 'http://localhost:4500';
 
         const response = await fetch(`${backendUrl}/api/auth/me`, {
             headers: {
-                'Authorization': `Bearer ${token.value}`
+                Authorization: `Bearer ${token.value}`
             }
         });
 
@@ -31,7 +36,7 @@ export async function GET() {
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
                 maxAge: 7 * 24 * 60 * 60, // 7 days
-                path: '/',
+                path: '/'
             });
         }
 

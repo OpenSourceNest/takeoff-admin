@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
+export const runtime = 'edge';
+
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ path: string[] }> }
@@ -29,7 +31,7 @@ async function handleProxy(request: Request, path: string[]) {
         const targetUrl = `${backendUrl}/api/analytics/${fullPath}${searchParams ? `?${searchParams}` : ''}`;
 
         const headers: Record<string, string> = {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         };
 
         if (token) {
@@ -38,7 +40,7 @@ async function handleProxy(request: Request, path: string[]) {
 
         const options: RequestInit = {
             method: request.method,
-            headers,
+            headers
         };
 
         if (request.method !== 'GET' && request.method !== 'HEAD') {
@@ -51,6 +53,9 @@ async function handleProxy(request: Request, path: string[]) {
         return NextResponse.json(data, { status: response.status });
     } catch (error) {
         console.error('[Analytics Proxy Error]:', error);
-        return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json(
+            { message: 'Internal Server Error' },
+            { status: 500 }
+        );
     }
 }

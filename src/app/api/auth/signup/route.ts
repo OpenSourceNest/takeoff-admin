@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
+export const runtime = 'edge';
+
 export async function POST(request: Request) {
     try {
         const body = await request.json();
@@ -33,7 +35,7 @@ export async function POST(request: Request) {
     } catch {
         return NextResponse.json(
             { message: 'Internal Server Error' },
-            { status: 500 }
+            { status: 500 },
         );
     }
 }
