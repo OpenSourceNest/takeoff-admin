@@ -1,27 +1,32 @@
-
-import { useEffect, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
 export const useSocket = () => {
-    const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
-    useEffect(() => {
-        // Connect to backend
-        const socketInstance = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000', {
-            withCredentials: true,
-        });
+  useEffect(() => {
+    // Connect to backend
+    const socketInstance = io(process.env.BACKEND_URL, {
+      withCredentials: true,
+    });
 
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setSocket(socketInstance);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSocket(socketInstance);
 
-        socketInstance.on('connect', () => {
-            console.log('Connected to WebSocket');
-        });
+    socketInstance.on("disconnect", (e) => {
+      console.log(e);
+      console.log("Websocket disconnected");
+    });
 
-        return () => {
-            socketInstance.disconnect();
-        };
-    }, []);
+    socketInstance.on("connect", () => {
+      console.log("Connected to WebSocket");
+    });
 
-    return socket;
+    return () => {
+      socketInstance.disconnect();
+      console.log("Websocket cleaned up and disconnected");
+    };
+  }, []);
+
+  return socket;
 };
