@@ -40,6 +40,9 @@ export default function RegistrationsPage() {
 
     const { success, error: errorToast } = useToast();
 
+    const formatLabel = (val: string) =>
+        val.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+
     const handleCopyId = (id: string) => {
         navigator.clipboard.writeText(id);
         success("ID copied to clipboard!");
@@ -207,7 +210,7 @@ export default function RegistrationsPage() {
                             <table className="w-full text-left whitespace-nowrap">
                                 <thead className="bg-white/5 text-white/60 uppercase text-xs">
                                     <tr>
-                                        <th className="p-4">ID</th>
+                                        <th className="p-4 text-center">#</th>
                                         <th className="p-4">Name</th>
                                         <th className="p-4">Email</th>
                                         <th className="p-4">Gender</th>
@@ -221,25 +224,19 @@ export default function RegistrationsPage() {
                                 </thead>
                                 <tbody className="text-white text-sm">
                                     {currentRegistrations.map((reg) => (
-                                        <tr key={reg.id} className="border-t border-white/5 hover:bg-white/5 transition">
-                                            <td
-                                                className="p-4 text-white/40 font-mono text-xs cursor-pointer hover:text-orange transition-colors"
-                                                onClick={() => handleCopyId(reg.id)}
-                                                title="Click to copy ID"
-                                            >
-                                                {reg.id.slice(0, 8)}...
-                                            </td>
+                                        <tr key={reg.id} className={`border-t border-white/5 hover:bg-white/5 transition ${currentRegistrations.indexOf(reg) % 2 === 0 ? '' : 'bg-white/[0.02]'}`}>
+                                            <td className="p-4 text-white/30 font-mono text-xs text-center">{(currentPage - 1) * itemsPerPage + currentRegistrations.indexOf(reg) + 1}</td>
                                             <td className="p-4 font-medium sticky left-0 bg-[#0a0a0a] z-10 border-r border-white/10">
                                                 {reg.firstName} {reg.lastName}
                                             </td>
                                             <td className="p-4 text-white/70">{reg.email}</td>
-                                            <td className="p-4">{reg.gender}</td>
+                                            <td className="p-4">{formatLabel(reg.gender)}</td>
                                             <td className="p-4">{reg.location}</td>
-                                            <td className="p-4 max-w-[200px] truncate" title={reg.profession.join(", ")}>
-                                                {reg.profession.slice(0, 2).join(", ")}{reg.profession.length > 2 && "..."}
+                                            <td className="p-4 max-w-[200px] truncate" title={reg.profession.map(formatLabel).join(", ")}>
+                                                {reg.profession.slice(0, 2).map(formatLabel).join(", ")}{reg.profession.length > 2 && "..."}
                                             </td>
                                             <td className="p-4 text-center">{reg.openSourceKnowledge}/10</td>
-                                            <td className="p-4 max-w-[150px] truncate">{reg.referralSource}</td>
+                                            <td className="p-4 max-w-[150px] truncate">{formatLabel(reg.referralSource)}</td>
                                             <td className="p-4">
                                                 {reg.checkedIn ? (
                                                     <span className="text-green-400 flex items-center gap-1">
@@ -359,12 +356,9 @@ export default function RegistrationsPage() {
                                 <div>
                                     <h3 className="text-2xl font-bold text-white">{selectedRegistration.firstName} {selectedRegistration.lastName}</h3>
                                     <p className="text-orange mb-1">{selectedRegistration.email}</p>
-                                    <div
-                                        className="text-white/40 font-mono text-xs cursor-pointer hover:text-white flex items-center gap-2"
-                                        onClick={() => handleCopyId(selectedRegistration.id)}
-                                        title="Click to copy ID"
-                                    >
-                                        ID: {selectedRegistration.id} <Icon icon="heroicons:clipboard" className="text-sm" />
+                                    <div className="inline-flex items-center gap-2 mt-1 px-3 py-1 rounded-md border border-white/10 bg-white/5 text-white/50 text-xs">
+                                        <Icon icon="heroicons:clock" className="text-sm" />
+                                        {new Date(selectedRegistration.createdAt).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                     </div>
                                 </div>
                                 <button
@@ -379,7 +373,7 @@ export default function RegistrationsPage() {
                                 <div className="space-y-4">
                                     <div>
                                         <label className="block text-white/40 text-xs uppercase tracking-wider mb-1">Gender</label>
-                                        <div className="text-white">{selectedRegistration.gender}</div>
+                                        <div className="text-white">{formatLabel(selectedRegistration.gender)}</div>
                                     </div>
                                     <div>
                                         <label className="block text-white/40 text-xs uppercase tracking-wider mb-1">Location</label>
@@ -389,7 +383,7 @@ export default function RegistrationsPage() {
                                         <label className="block text-white/40 text-xs uppercase tracking-wider mb-1">Profession</label>
                                         <div className="text-white flex flex-wrap gap-1">
                                             {selectedRegistration.profession.map(p => (
-                                                <span key={p} className="bg-white/10 px-2 py-0.5 rounded text-xs">{p}</span>
+                                                <span key={p} className="bg-white/10 px-2 py-0.5 rounded text-xs">{formatLabel(p)}</span>
                                             ))}
                                             {selectedRegistration.professionOther && <span className="bg-white/10 px-2 py-0.5 rounded text-xs italic">{selectedRegistration.professionOther}</span>}
                                         </div>
@@ -432,7 +426,7 @@ export default function RegistrationsPage() {
                                 <div className="mt-6 pt-6 border-t border-white/10 space-y-4">
                                     <div>
                                         <label className="block text-white/40 text-xs uppercase tracking-wider mb-1">Referral Source</label>
-                                        <div className="text-white">{selectedRegistration.referralSource} {selectedRegistration.referralSourceOther && `(${selectedRegistration.referralSourceOther})`}</div>
+                                        <div className="text-white">{formatLabel(selectedRegistration.referralSource)} {selectedRegistration.referralSourceOther && `(${selectedRegistration.referralSourceOther})`}</div>
                                     </div>
                                     {selectedRegistration.interests && (
                                         <div>

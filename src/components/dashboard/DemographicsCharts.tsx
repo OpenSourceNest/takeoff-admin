@@ -4,6 +4,7 @@ import { DemographicsData } from '@/types/analytics.types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 const COLORS = ['#A9500C', '#D97706', '#EA580C', '#92400E', '#78350F', '#F97316', '#C2410C', '#7C2D12'];
+const GENDER_COLORS = ['#F97316', '#06B6D4', '#8B5CF6'];
 
 export default function DemographicsCharts({ data }: { data: DemographicsData | null }) {
     if (!data) return <div className="h-64 bg-white/5 rounded-2xl animate-pulse" />;
@@ -49,7 +50,7 @@ export default function DemographicsCharts({ data }: { data: DemographicsData | 
                                 dataKey="value"
                             >
                                 {data.genders.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    <Cell key={`cell-${index}`} fill={GENDER_COLORS[index % GENDER_COLORS.length]} />
                                 ))}
                             </Pie>
                             <Tooltip contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333', color: '#fff' }} itemStyle={{ color: '#fff' }} />
